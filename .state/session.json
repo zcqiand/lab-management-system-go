@@ -1,19 +1,19 @@
 {
   "schema": 1,
   "project": "lab-management-system-go",
-  "current_task": "init 收官：Go 栈骨架 + 功能树 M/F 镜像 + 家族登记（X13=5211），等待第一个需求",
+  "current_task": "REQ-2026-001 健康检查 + 端口装配（saas-go 复刻）已验收（2026-10-26）：live 探针过，L0-L5 全绿，tag 已打",
   "done": [
-    "脚手架生成（profiles/go.toml + adapters/go），L0-L5 门禁全绿（2026-10-26）",
-    "go 1.27.3 装机（scoop），GOPROXY=goproxy.cn",
-    "function-tree 拆到 M/F 级：M00/M01/M04 镜像 BASE，状态全规划，I 级未登记",
-    "家族档案 lab.md + 细则 §6/§6.1 登记 X13=5211（18 仓）"
+    "REQ-2026-001 立档（saas-go 同源复刻；澄清表含「基础设施端点不挂 fn ID 不动树」先例判）",
+    "四文件复制改模块路径（lab-management-system-go）+ 槽位端口 5211；含 saas 侧 New(addr) 指纹修复",
+    "锚点包 internal/harness 删除；测试绿（config 4 例 + server 2 例同源）",
+    "live 探针：GET 200 {\"mode\":\"go\",\"ok\":true} / POST 405（5211）；全门 L0-L5 绿"
   ],
-  "next": "第一个需求来了：/req 立档 → 按需求涉及的 F 段从 BASE mirror 登记 I 级（tree_change.py --apply，reason 引 REQ）→ red-first 实现",
+  "next": "等下批需求（同款 saas 先行 lab 复刻节奏）；首个 API 需求时人裁 Go codegen 工具（profiles/codegen.md go 行）",
   "open_questions": [],
   "dont": [
     "不要改 .harness/stack.json 让门变松",
-    "不要给 skip 的测试挂功能 ID",
-    "不要在 HTTP handler 内写业务逻辑；不要吞错（_ = err）"
+    "http.Server 零值 Addr 落 :80——装配必须显式传 addr（REQ-2026-001 T-2 实机指纹，承 saas-go）",
+    "不要给 skip 的测试挂功能 ID"
   ],
   "last_gate_passed_at": "2026-10-26"
 }
