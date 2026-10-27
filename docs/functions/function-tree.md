@@ -110,7 +110,7 @@ M97/M98/M99/M96（infra/契约专属段）不进 BASE，由各消费仓自管。
 | M02.F01.I01 | 合同列表 | 接口 | 前端+后端 | GET /api/contracts?keyword=&status=：按 tenant 收口 + 2 过滤，返回 Contract[] | 已上线 |
 | M02.F01.I02 | 合同详情 | 接口 | 前端+后端 | GET /api/contracts/{id}：404 if 不存在 | 已上线 |
 | M02.F01.I03 | 创建合同 | 接口 | 前端+后端 | POST /api/contracts：code/clientUnit/projectName/constructionUnit/witnessUnit/witness 必填，status 默认 ACTIVE | 已上线 |
-| M02.F01.I04 | 更新合同 | 接口 | 前端+后端 | PUT /api/contracts/{id}：PATCH 语义 | 开发中 |
+| M02.F01.I04 | 更新合同 | 接口 | 前端+后端 | PUT /api/contracts/{id}：PATCH 语义 | 已上线 |
 | M02.F01.I05 | 删除合同 | 接口 | 前端+后端 | DELETE /api/contracts/{id}：204；如果有接样引用 FK RESTRICT 拒 | 已上线 |
 
 
@@ -137,7 +137,7 @@ M97/M98/M99/M96（infra/契约专属段）不进 BASE，由各消费仓自管。
 | M03.F01.I02 | 接样单详情 | 接口 | 前端+后端 | GET /api/receipts/{id}：返回 SampleReceipt（含 flow_history）；**shared-with: M03.F05.I02 / M03.F06.I02 / M03.F07.I02 / M03.F08.I02 / M03.F09.I01** | 已上线 |
 | M03.F01.I03 | 创建接样单 | 接口 | 前端+后端 | POST /api/receipts：contract_id FK 必存在；flow_status=receiving 起步；flow_history=[] | 已上线 |
 | M03.F01.I04 | 更新接样单 | 接口 | 前端+后端 | PUT /api/receipts/{id}：PATCH 语义 | 已上线 |
-| M03.F01.I05 | 删除接样单 | 接口 | 前端+后端 | DELETE /api/receipts/{id}：CASCADE 删除下属 samples | 开发中 |
+| M03.F01.I05 | 删除接样单 | 接口 | 前端+后端 | DELETE /api/receipts/{id}：CASCADE 删除下属 samples | 已上线 |
 | M03.F01.I06 | 接样单流程历史 | 接口 | 前端+后端 | GET /api/receipts/{id}/history：返回 FlowHistoryEntry[]（jsonb 展开为 List） | 已上线 |
 | M03.F01.I07 | 接样单 ext 字段补录 | 接口 | 前端+后端 | PUT /api/samples/{id}/ext：UpdateSampleExtRequest{ext} 按当前类别 extFields 补录持久化到 Sample.ext | 已上线 |
 | M03.F01.I08 | 接样-提交 | 接口 | 前端+后端 | POST /api/receipts/receiving/act，body.action={SUBMIT、RETURN、WITHDRAW} 三动作统一（2026-09-18：I09 退回/I10 撤回语义并入本行；RETURN 前置阶段退回无前置则 422、WITHDRAW 提交人撤回回到原阶段；7 阶段全 act 模式） | 已上线 |
@@ -165,7 +165,7 @@ M97/M98/M99/M96（infra/契约专属段）不进 BASE，由各消费仓自管。
 | M03.F03.I02 | 样品详情 | 接口 | 前端+后端 | GET /api/samples/{id} | 已上线 |
 | M03.F03.I03 | 创建样品 | 接口 | 前端+后端 | POST /api/samples：receipt_id FK 必存在；ext 默认 {} | 已上线 |
 | M03.F03.I04 | 更新样品 | 接口 | 前端+后端 | PUT /api/samples/{id}：PATCH 语义 | 已上线 |
-| M03.F03.I05 | 删除样品 | 接口 | 前端+后端 | DELETE /api/samples/{id}：204 | 开发中 |
+| M03.F03.I05 | 删除样品 | 接口 | 前端+后端 | DELETE /api/samples/{id}：204 | 已上线 |
 | M03.F03.I06 | 检测记录列表 | 接口 | 前端+后端 | GET /api/test-records?sampleId=&page=&pageSize=：tenant 收口 + sampleId 过滤 + 分页；data-fn=nextjs/react/vue 仓 test-records 页面 | 已上线 |
 | M03.F03.I07 | 检测记录详情 | 接口 | 前端+后端 | GET /api/test-records/{id}：返回 TestRecord | 已上线 |
 | M03.F03.I08 | 创建检测记录 | 接口 | 前端+后端 | POST /api/test-records：sampleId/parameterCode/requirement/result 必填；tenant 从 token claim 注入 | 已上线 |
@@ -336,7 +336,7 @@ M97/M98/M99/M96（infra/契约专属段）不进 BASE，由各消费仓自管。
 | M06.F01.I04 | 删除专项 | 接口 | 前端+后端 | DELETE /api/inspection/specialties/{code}：204 if exists，否则 404 | 已上线 |
 | M06.F01.I05 | 项目↔标准 link | 接口 | 前端+后端 | POST /api/inspection/links/object-standard：建立 object→standard(role) 关联，role 必填（TESTING/JUDGMENT） | 已上线 |
 | M06.F01.I06 | 项目↔标准 unlink | 接口 | 前端+后端 | DELETE /api/inspection/links/object-standard：404 if 不存在 | 已上线 |
-| M06.F01.I07 | 项目↔标准 列表 | 接口 | 前端+后端 | GET /api/inspection/links/object-standard?inspectionObjectCode=&role=：`Page<ObjectStandardLink>`，按 objectCode/role 过滤 | 开发中 |
+| M06.F01.I07 | 项目↔标准 列表 | 接口 | 前端+后端 | GET /api/inspection/links/object-standard?inspectionObjectCode=&role=：`Page<ObjectStandardLink>`，按 objectCode/role 过滤 | 已上线 |
 
 
 ### M06.F02 检测项目
@@ -351,8 +351,8 @@ M97/M98/M99/M96（infra/契约专属段）不进 BASE，由各消费仓自管。
 | M06.F02.I06 | 专项↔项目 unlink | 接口 | 前端+后端 | DELETE /api/inspection/links/specialty-object：404 if 不存在 | 已上线 |
 | M06.F02.I07 | 项目↔参数 link | 接口 | 前端+后端 | POST /api/inspection/links/object-parameter：建立 object→parameter 关联，qualificationLevel 默认 QUALIFIED，sourcePage/remark 可选 | 已上线 |
 | M06.F02.I08 | 项目↔参数 unlink | 接口 | 前端+后端 | DELETE /api/inspection/links/object-parameter：404 if 不存在 | 已上线 |
-| M06.F02.I09 | 专项↔项目 列表 | 接口 | 前端+后端 | GET /api/inspection/links/specialty-object?inspectionSpecialtyCode=：`Page<SpecialtyObjectLink>`，按专项 code 过滤 | 开发中 |
-| M06.F02.I10 | 项目↔参数 列表 | 接口 | 前端+后端 | GET /api/inspection/links/object-parameter?inspectionObjectCode=&inspectionParameterCode=：`Page<ObjectParameterLink>`，按 objectCode/parameterCode 过滤 | 开发中 |
+| M06.F02.I09 | 专项↔项目 列表 | 接口 | 前端+后端 | GET /api/inspection/links/specialty-object?inspectionSpecialtyCode=：`Page<SpecialtyObjectLink>`，按专项 code 过滤 | 已上线 |
+| M06.F02.I10 | 项目↔参数 列表 | 接口 | 前端+后端 | GET /api/inspection/links/object-parameter?inspectionObjectCode=&inspectionParameterCode=：`Page<ObjectParameterLink>`，按 objectCode/parameterCode 过滤 | 已上线 |
 
 
 ### M06.F03 检测参数
@@ -366,7 +366,7 @@ M97/M98/M99/M96（infra/契约专属段）不进 BASE，由各消费仓自管。
 | M06.F03.I05 | 标准↔参数 link | 接口 | 前端+后端 | POST /api/inspection/links/standard-parameter：建立 standard→parameter 关联 | 已上线 |
 | M06.F03.I06 | 标准↔参数 unlink | 接口 | 前端+后端 | DELETE /api/inspection/links/standard-parameter：404 if 不存在 | 已上线 |
 | M06.F03.I07 | 参数↔界面 unlink | 接口 | 前端+后端 | DELETE /api/param-interfaces/links：404 if 不存在 | 已上线 |
-| M06.F03.I08 | 标准↔参数 列表 | 接口 | 前端+后端 | GET /api/inspection/links/standard-parameter?inspectionStandardCode=&inspectionParameterCode=：`Page<StandardParameterLink>`，按 standardCode/parameterCode 过滤 | 开发中 |
+| M06.F03.I08 | 标准↔参数 列表 | 接口 | 前端+后端 | GET /api/inspection/links/standard-parameter?inspectionStandardCode=&inspectionParameterCode=：`Page<StandardParameterLink>`，按 standardCode/parameterCode 过滤 | 已上线 |
 
 
 ### M06.F04 检测标准
