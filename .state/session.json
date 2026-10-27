@@ -1,5 +1,5 @@
 {
-  "current_task": "REQ-2026-004 lab-go 全量业务切片已交付收工（v0.2.0-20261027）；suite 收官批 edc112c 已推",
+  "current_task": "REQ-2026-004 全交付：v0.2.0 代码+GA 翻牌（7 条 I 级已上线，aaa5fcf）+ CI 修复批全绿；待 secrets→tag 上线",
   "done": [
     "Task 10-12 全落地：samples/test-records 12 端点 + receipts/flow/summary 17 端点（d24c53d/27da412/6e93292，TDD 红绿齐全）",
     "gate -p lab-management-system-go exit 0（含 strict 幂等 PASS、go clean -testcache 后 trace 重刷 7134 测试/113 fn）",
@@ -9,7 +9,7 @@
     "gate --all 终跑：仅 swift×2 L2 home-mac 红（构建机离线 ping 100% 丢，环境性），284 PASS 其余全绿",
     "final review（code-reviewer 子代理全新上下文）：BLOCK→修复——CORS 白名单中间件补交付/守卫验 typ/水合 saas 错误 401·502 分流（aabba55，各 RED→GREEN，suite 10/10，gate exit 0，已推）；4 Minor 记账不修"
   ],
-  "next": "① 等 GitHub secrets 七键配好（PG_HOST/PG_PASSWORD/JWT_SIGNING_KEY/LAB_SAAS_CLIENT_SECRET/LAB_SAAS_DEFAULT_TENANT_ID/LAB_SAAS_SERVICE_USER/LAB_SAAS_SERVICE_PASSWORD，值对齐 lab-management-system-rails 同名 secrets，PLAN.md 已注）→ 打 tag v0.2.0-20261027 触发 deploy（CI 已全绿 b0e265d，deploy 前置 test 过了才会走到 secrets）；② 7 条已实现 I 级（M02.F01.I04 等）等人明示「验收通过」→ REQ-2026-004 记验收段 → tree_change --apply GA 翻牌",
+  "next": "唯一余项=人配 GitHub secrets 七键（PG_HOST/PG_PASSWORD/JWT_SIGNING_KEY/LAB_SAAS_CLIENT_SECRET/LAB_SAAS_DEFAULT_TENANT_ID/LAB_SAAS_SERVICE_USER/LAB_SAAS_SERVICE_PASSWORD，值对齐 lab-management-system-rails 同名 secrets，PLAN.md 已注）→ 打 tag v0.2.0-20261027 触发 deploy（CI 全绿 aaa5fcf 起）；GA 翻牌已完成（7 条已上线，aaa5fcf）",
   "open_questions": [
     "7 条 I 级 GA 翻转需人明示验收（代码+测试+CT live 394/394 全实证，但脚本硬校验 REQ 文档「人工验收…通过」，rails 先例=用户明示，不能代写）",
     "GitHub secrets 七键谁配（3 键值在 VPS env-file 本地不可读，不代配）",
