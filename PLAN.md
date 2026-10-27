@@ -5,4 +5,5 @@
 - [ ] PG/JWT env 接线时进 `<family>-shared` family-env.json members/scope
 - [ ] 书稿章节映射补齐（README「配套书籍及章节映射」）
 
-已交付：REQ-2026-001 健康检查 + 端口装配（v0.1.0-20261026）；REQ-2026-002 进 prod deploy 链（v0.1.1-20261026，`https://{domain}`，X13={port}）。
+已交付：REQ-2026-001 健康检查 + 端口装配（v0.1.0-20261026）；REQ-2026-002 进 prod deploy 链（v0.1.1-20261026，`https://{domain}`，X13={port}）；REQ-2026-004 lab-go 全量业务切片（v0.2.0-20261027，120 op parity + CT go:5211 收敛）。
+- [ ] 打 tag `v0.2.0-20261027`（全量回归绿；tag push 触发 prod deploy——先配 GitHub secrets：PG_HOST/PG_PASSWORD/JWT_SIGNING_KEY/LAB_SAAS_CLIENT_SECRET/LAB_SAAS_DEFAULT_TENANT_ID/LAB_SAAS_SERVICE_USER/LAB_SAAS_SERVICE_PASSWORD，值对齐 rails 同名 secrets）
