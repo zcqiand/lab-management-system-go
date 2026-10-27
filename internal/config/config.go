@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
 
 // Port 读取 SERVER_PORT（multi-repo-family §6 家族统一 key）并校验为合法端口。
@@ -32,4 +33,30 @@ func DatabaseURL() (string, error) {
 		return "", fmt.Errorf("缺少环境变量 DATABASE_URL（全集见 .env.example；禁默认值兜底）")
 	}
 	return raw, nil
+}
+
+// SaasIDPConfig saas IdP 出站五键（装配层透传给 saas.NewHTTPClient）。
+type SaasIDPConfig struct {
+	Base, ClientID, ClientSecret, DefaultTenantID, ServiceClientID string
+}
+
+// SaasIDP 读取 saas IdP 出站五键（REQ-2026-023 同款，fail-fast 禁兜底）。
+func SaasIDP() (SaasIDPConfig, error) {
+	c := SaasIDPConfig{
+		Base:            strings.TrimRight(os.Getenv("LAB_SAAS_BASE_URL"), "/"),
+		ClientID:        os.Getenv("LAB_SAAS_CLIENT_ID"),
+		ClientSecret:    os.Getenv("LAB_SAAS_CLIENT_SECRET"),
+		DefaultTenantID: os.Getenv("LAB_SAAS_DEFAULT_TENANT_ID"),
+		ServiceClientID: os.Getenv("LAB_SAAS_SERVICE_CLIENT_ID"),
+	}
+	for key, val := range map[string]string{
+		"LAB_SAAS_BASE_URL": c.Base, "LAB_SAAS_CLIENT_ID": c.ClientID,
+		"LAB_SAAS_CLIENT_SECRET": c.ClientSecret, "LAB_SAAS_DEFAULT_TENANT_ID": c.DefaultTenantID,
+		"LAB_SAAS_SERVICE_CLIENT_ID": c.ServiceClientID,
+	} {
+		if val == "" {
+			return c, fmt.Errorf("缺少环境变量 %s（禁默认值兜底）", key)
+		}
+	}
+	return c, nil
 }

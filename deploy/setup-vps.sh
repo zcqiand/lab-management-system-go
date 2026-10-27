@@ -7,8 +7,8 @@
 # 同一台 VPS 上要先跑家族其他仓的 setup-vps.sh（如果同时托管多个服务）。
 # 本脚本只负责 go 部分: 目录, deploy 用户, 不同 default_server。
 #
-# go 容器无数据库依赖（REQ-2026-002 形态:env 契约只有 SERVER_PORT 字面量），
-# 本脚本**不**生成 go.env——由 deploy 脚本首启无条件自举。本脚本只保证:
+# go 容器 REQ-2026-004 起接 PG/JWT/saas IdP 代理链（env 契约 14 key），
+# 本脚本**不**生成 go.env——由 deploy 脚本首启自举（secret 类 key 走 CI envs 转发）。本脚本只保证:
 #   1. apt 装 nginx、docker (如未装, 幂等)
 #   2. 创建 deploy 用户 (key-only SSH) + 加进 docker 组
 #   3. 建 /home/deploy/lab-management-system-go/
@@ -21,7 +21,7 @@
 #   b) 本地跑: ssh-copy-id -i ~/.ssh/id_ed25519.pub deploy@VPS（家族任一仓已做则跳过）
 #   c) GitHub Repository Secrets 加: DOCKER_USERNAME / DOCKER_PASSWORD / VPS_HOST /
 #      VPS_USER / VPS_SSH_KEY；vars 加 NGINX_DOMAIN / NGINX_CERT_BASENAME
-#   d) 首次 deploy 由 CI 触发（go.env 全字面量自举，无 secret 引导环节）
+#   d) 首次 deploy 由 CI 触发（go.env 由 CI deploy job 自举（PG_PASSWORD/LAB_SAAS_* secrets 转发））
 
 set -eu
 
@@ -92,4 +92,4 @@ fi
 
 nginx -t
 systemctl reload nginx
-log "setup done — go.env 将由 deploy 脚本首启自举（SERVER_PORT 字面量，无 secret 环节）"
+log "setup done — go.env 将由 CI deploy job 首启自举（secrets 转发，rails 同款）"

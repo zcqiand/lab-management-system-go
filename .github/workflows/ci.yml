@@ -68,7 +68,7 @@ jobs:
   # 部署链（lab X13=5211；镜像 kotlin deploy job，tag push 触发）:
   #   docker build & push（latest + tag 双份）→ VPS deploy 脚本拉镜像 + 渲染 nginx vhost
   #   + 起容器 + /health 探活。本仓 env 契约只有 SERVER_PORT（无 secret），
-  #   go.env 由 deploy 脚本无条件自举字面量——不需要 envs 转发。
+  #   go.env 由 deploy 脚本自举 14 key（REQ-2026-004）——secret 类走 envs 转发。
   deploy:
     runs-on: ubuntu-latest
     needs: test
@@ -105,7 +105,14 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          envs: NGINX_DOMAIN,NGINX_CERT_BASENAME
+          envs: PG_HOST,PG_PASSWORD,JWT_SIGNING_KEY,LAB_SAAS_CLIENT_SECRET,LAB_SAAS_DEFAULT_TENANT_ID,LAB_SAAS_SERVICE_USER,LAB_SAAS_SERVICE_PASSWORD,NGINX_DOMAIN,NGINX_CERT_BASENAME
+          PG_HOST: ${{ secrets.PG_HOST }}
+          PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
+          JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
+          LAB_SAAS_CLIENT_SECRET: ${{ secrets.LAB_SAAS_CLIENT_SECRET }}
+          LAB_SAAS_DEFAULT_TENANT_ID: ${{ secrets.LAB_SAAS_DEFAULT_TENANT_ID }}
+          LAB_SAAS_SERVICE_USER: ${{ secrets.LAB_SAAS_SERVICE_USER }}
+          LAB_SAAS_SERVICE_PASSWORD: ${{ secrets.LAB_SAAS_SERVICE_PASSWORD }}
           script: |
             # 自举: 首次部署无 /home/deploy/<repo>/ 时自动建 + 拉 deploy 脚本
             set -e

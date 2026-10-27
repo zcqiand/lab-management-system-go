@@ -15,19 +15,27 @@ import (
 	"gorm.io/gorm"
 
 	genapi "lab-management-system-go/internal/gen/api"
+	"lab-management-system-go/internal/impl/service"
 )
 
 // Server 实现 genapi.ServerInterface。DB 为装配期注入的连接（*gorm.DB；
 // 各域实现接管后经 service 使用，路由壳阶段可为 nil 的域不触库）。
+// Auth 认证域服务（Task 5 起落地；nil 时 auth handler 不可用——壳阶段语义）。
 type Server struct {
-	DB *gorm.DB
+	DB   *gorm.DB
+	Auth *service.AuthService
 }
 
 // 编译期保证 Server 满足生成接口——签名漂移在 build 门即红。
 var _ genapi.ServerInterface = (*Server)(nil)
 
-// NewServer 构造路由壳（db 注入给已落地的域）。
+// NewServer 构造路由壳（db 注入给已落地的域；Auth 未装配——壳阶段/纯路由面测试）。
 func NewServer(db *gorm.DB) *Server { return &Server{DB: db} }
+
+// NewServerWithAuth 构造带认证域服务的 Server（装配层 main 用）。
+func NewServerWithAuth(db *gorm.DB, authSvc *service.AuthService) *Server {
+	return &Server{DB: db, Auth: authSvc}
+}
 
 func notImplemented(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
@@ -36,46 +44,6 @@ func notImplemented(w http.ResponseWriter) {
 }
 
 func (s *Server) FrontendBindMetaGetFrontendBindSnapshot(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) AuthLogin(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) AuthLogout(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) AuthGetCurrentUser(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) AuthGetMenus(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) AuthNativeLogin(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) AuthGetPermissions(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) AuthRefresh(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) AuthSsoAuthorize(w http.ResponseWriter, r *http.Request, params genapi.AuthSsoAuthorizeParams) {
-	notImplemented(w)
-}
-
-func (s *Server) AuthSsoCallback(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) AuthSwitchTenant(w http.ResponseWriter, r *http.Request) {
 	notImplemented(w)
 }
 

@@ -72,3 +72,20 @@ func Write(w http.ResponseWriter, err error) {
 func ErrSaasUnavailable() *E {
 	return &E{Status: http.StatusBadGateway, Code: "SAAS_UNAVAILABLE", Message: "saas idp unavailable"}
 }
+
+// ErrMenusUnavailable 菜单快照 miss（重启/过期/未填充）→ 503 MENUS_UNAVAILABLE，
+// demo 兜底已删（2026-08-27），前端回退静态菜单（rails ApplicationController 镜像）。
+func ErrMenusUnavailable() *E {
+	return &E{Status: http.StatusServiceUnavailable, Code: "MENUS_UNAVAILABLE", Message: "menu snapshot unavailable; re-login to refresh"}
+}
+
+// ErrInvalidGrant saas OAuth code 重放/过期 → 400 passthrough（lab-msw 契约对齐）。
+func ErrInvalidGrant(msg string) *E {
+	return &E{Status: http.StatusBadRequest, Code: "INVALID_GRANT", Message: msg}
+}
+
+// ErrSaasUpstream refresh/sso 链 saas 不可达 → 502 SAAS_UPSTREAM_ERROR
+// （rails ApplicationController 双映射：登录链走 ErrSaasUnavailable，此二链专属）。
+func ErrSaasUpstream() *E {
+	return &E{Status: http.StatusBadGateway, Code: "SAAS_UPSTREAM_ERROR", Message: "saas upstream unavailable"}
+}

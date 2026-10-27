@@ -11,12 +11,15 @@
 # 与姊妹仓 lab-management-system-kotlin.sh 的差异:
 #   - 运行时 Go 1.27 静态二进制（golang:1.27-alpine builder, CGO_ENABLED=0,
 #     alpine:3 runtime;镜像内零 JVM/解释器）
-#   - env 契约只有 SERVER_PORT（REQ-2026-002 形态:本仓尚无 PG/JWT 接线）——
-#     go.env 无 secret 类 key,deploy 脚本无条件自举字面量,不需要 SSH envs 转发
+#   - env 契约 14 key = .env.example 全集（REQ-2026-004 全量业务切片起接 PG/JWT/
+#     saas IdP 代理链）——PG_PASSWORD / LAB_SAAS_CLIENT_SECRET / 服务账号双键走 SSH
+#     envs 转发（缺则 fail fast，服务账号 2026-08-28 纪律）；DATABASE_URL 由
+#     PG_HOST/PG_PASSWORD 合成（远程 lab_prod）；lab JWT 无 aud（家族有意差异，
+#     rails token_service 同款，不写 JWT_AUDIENCE）
 #   - 绑全接口 ":port"（容器可达;kotor 先例 Netty 默认 0.0.0.0 同姿态）
 #
 # 前置: deploy 用户需在 docker 组中(sudo usermod -aG docker deploy)。
-#        go.env 由本脚本首启无条件生成（全字面量,无 secret 来源依赖）。
+#        go.env 由本脚本首启自举（secret 类 key 必须由 CI secrets 转发）。
 
 set -eu
 
@@ -35,18 +38,77 @@ if [ -z "$USERNAME" ] || [ -z "$PASSWORD" ]; then
   exit 2
 fi
 
-# go.env 自举: env 契约 = .env.example 全集 1 key（L0.5 deploy parity 比对基线）,
-# 全字面量非 secret——无条件生成/补齐,PG/JWT 需求进来时同 commit 扩此处 + secrets 转发。
+# go.env 自举: env 契约 = .env.example 全集 14 key（L0.5 deploy parity 比对基线）。
+# secret 类缺转发 = fail fast；JWT_SIGNING_KEY 转发缺省随机生成（持久化落 env-file）。
+if [ -z "${PG_PASSWORD:-}" ] || [ -z "${LAB_SAAS_CLIENT_SECRET:-}" ] || [ -z "${LAB_SAAS_SERVICE_USER:-}" ] || [ -z "${LAB_SAAS_SERVICE_PASSWORD:-}" ]; then
+  echo "ERROR: PG_PASSWORD / LAB_SAAS_CLIENT_SECRET / LAB_SAAS_SERVICE_USER / LAB_SAAS_SERVICE_PASSWORD secrets required (CI envs 转发;服务账号 fail-fast 2026-08-28 纪律)" >&2
+  exit 1
+fi
 if [ ! -f "$BASE/go.env" ]; then
-  echo "→ bootstrapping $BASE/go.env (SERVER_PORT literal)"
+  echo "→ bootstrapping $BASE/go.env from env secrets"
   umask 077
-  printf 'SERVER_PORT=5211\n' > "$BASE/go.env"
+  {
+    printf 'SERVER_PORT=5211\n'
+    printf 'DATABASE_URL=postgresql://postgres:%s@%s:5432/lab_prod\n' "$PG_PASSWORD" "${PG_HOST:-100.79.128.25}"
+    printf 'JWT_SIGNING_KEY=%s\n' "${JWT_SIGNING_KEY:-$(head -c 48 /dev/urandom | base64 | tr -d '\n')}"
+    printf 'JWT_ISSUER=lab-management-system\n'
+    printf 'JWT_TTL_SECONDS=3600\n'
+    printf 'JWT_REFRESH_TTL_SECONDS=604800\n'
+    printf 'LAB_SAAS_BASE_URL=https://saas-go.xiangru.uk\n'
+    printf 'LAB_SAAS_CLIENT_ID=lab-management\n'
+    printf 'LAB_SAAS_CLIENT_SECRET=%s\n' "$LAB_SAAS_CLIENT_SECRET"
+    printf 'LAB_SAAS_DEFAULT_TENANT_ID=%s\n' "${LAB_SAAS_DEFAULT_TENANT_ID:-00000000-0000-0000-0000-000000000001}"
+    printf 'LAB_SAAS_SERVICE_USER=%s\n' "$LAB_SAAS_SERVICE_USER"
+    printf 'LAB_SAAS_SERVICE_PASSWORD=%s\n' "$LAB_SAAS_SERVICE_PASSWORD"
+    printf 'LAB_SAAS_SERVICE_CLIENT_ID=lab-management\n'
+    printf 'LAB_SSO_LOGIN_URL=https://saas-react.xiangru.uk\n'
+    printf 'LAB_CORS_ALLOWED_ORIGINS=https://lab-go.xiangru.uk,https://lab-react.xiangru.uk,https://lab-vue.xiangru.uk,https://lab-nextjs.xiangru.uk,https://lab-flutter.xiangru.uk\n'
+  } > "$BASE/go.env"
   chown deploy:deploy "$BASE/go.env" 2>/dev/null || true
   chmod 600 "$BASE/go.env"
 fi
 if ! grep -q '^SERVER_PORT=..*' "$BASE/go.env"; then
   echo "ERROR: $BASE/go.env has no SERVER_PORT line" >&2
   exit 1
+fi
+if ! grep -q '^DATABASE_URL=..*' "$BASE/go.env"; then
+  echo "ERROR: $BASE/go.env has no DATABASE_URL line (REQ-2026-004 起业务面必需；存量老 env 请删除后由本脚本重新自举)" >&2
+  exit 1
+fi
+
+# 存量 go.env 补键/占位值 reconcile（rails 同款：bootstrap 残留占位会让容器起来即坏）
+append_if_missing() {
+  key="$1"; val="$2"
+  if ! grep -q "^${key}=" "$BASE/go.env"; then
+    echo "→ append ${key} to existing $BASE/go.env"
+    umask 077
+    printf '%s=%s\n' "$key" "$val" >> "$BASE/go.env"
+  fi
+}
+append_if_missing SERVER_PORT '5211'
+append_if_missing JWT_ISSUER 'lab-management-system'
+append_if_missing JWT_TTL_SECONDS '3600'
+append_if_missing JWT_REFRESH_TTL_SECONDS '604800'
+append_if_missing LAB_SAAS_BASE_URL 'https://saas-go.xiangru.uk'
+append_if_missing LAB_SSO_LOGIN_URL 'https://saas-react.xiangru.uk'
+append_if_missing LAB_SAAS_CLIENT_ID 'lab-management'
+append_if_missing LAB_SAAS_DEFAULT_TENANT_ID '00000000-0000-0000-0000-000000000001'
+append_if_missing LAB_SAAS_SERVICE_CLIENT_ID 'lab-management'
+append_if_missing LAB_CORS_ALLOWED_ORIGINS 'https://lab-go.xiangru.uk,https://lab-react.xiangru.uk,https://lab-nextjs.xiangru.uk,https://lab-vue.xiangru.uk,https://lab-flutter.xiangru.uk'
+upsert_if_placeholder() {
+  key="$1"; val="$2"
+  if ! grep -q "^${key}=..*" "$BASE/go.env" || grep -q "^${key}=$" "$BASE/go.env" || grep -q "^${key}=CHANGE_ME$" "$BASE/go.env"; then
+    echo "→ upsert ${key} to existing $BASE/go.env"
+    sed -i "s#^${key}=.*#${key}=${val}#" "$BASE/go.env"
+  fi
+}
+upsert_if_placeholder PG_PASSWORD "${PG_PASSWORD}"
+upsert_if_placeholder JWT_SIGNING_KEY "${JWT_SIGNING_KEY:-$(head -c 48 /dev/urandom | base64 | tr -d '\n')}"
+upsert_if_placeholder LAB_SAAS_CLIENT_SECRET "$LAB_SAAS_CLIENT_SECRET"
+upsert_if_placeholder LAB_SAAS_SERVICE_USER "$LAB_SAAS_SERVICE_USER"
+upsert_if_placeholder LAB_SAAS_SERVICE_PASSWORD "$LAB_SAAS_SERVICE_PASSWORD"
+if ! grep -q '^DATABASE_URL=..*' "$BASE/go.env"; then
+  printf 'DATABASE_URL=postgresql://postgres:%s@%s:5432/lab_prod\n' "$PG_PASSWORD" "${PG_HOST:-100.79.128.25}" >> "$BASE/go.env"
 fi
 
 # nginx vhost 重渲染(每次 deploy 都跑,ADR-0018:容器端口变了 vhost 必须跟)。

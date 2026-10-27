@@ -35,3 +35,31 @@ func TestPortOutOfRangeRejected(t *testing.T) {
 		t.Fatal("超出 1-65535 的端口应返回错误")
 	}
 }
+
+// REQ-2026-004 Task 5：saas IdP 出站五键（LAB_SAAS_BASE_URL/CLIENT_ID/CLIENT_SECRET/
+// DEFAULT_TENANT_ID/SERVICE_CLIENT_ID）——缺一 fail-fast，禁默认值兜底。
+func TestSaasIDPMissingKeyFailsFast(t *testing.T) {
+	t.Setenv("LAB_SAAS_BASE_URL", "http://localhost:5101")
+	t.Setenv("LAB_SAAS_CLIENT_ID", "lab-management")
+	t.Setenv("LAB_SAAS_CLIENT_SECRET", "sec")
+	t.Setenv("LAB_SAAS_DEFAULT_TENANT_ID", "uuid-1")
+	t.Setenv("LAB_SAAS_SERVICE_CLIENT_ID", "")
+	if _, err := SaasIDP(); err == nil {
+		t.Fatal("缺 SERVICE_CLIENT_ID 应报错（fail-fast）")
+	}
+}
+
+func TestSaasIDPValidPassthrough(t *testing.T) {
+	t.Setenv("LAB_SAAS_BASE_URL", "http://localhost:5101/")
+	t.Setenv("LAB_SAAS_CLIENT_ID", "lab-management")
+	t.Setenv("LAB_SAAS_CLIENT_SECRET", "sec")
+	t.Setenv("LAB_SAAS_DEFAULT_TENANT_ID", "uuid-1")
+	t.Setenv("LAB_SAAS_SERVICE_CLIENT_ID", "svc-client")
+	c, err := SaasIDP()
+	if err != nil {
+		t.Fatalf("五键齐不应报错: %v", err)
+	}
+	if c.Base != "http://localhost:5101" || c.ClientID != "lab-management" || c.ServiceClientID != "svc-client" {
+		t.Fatalf("值透传不符: %+v", c)
+	}
+}

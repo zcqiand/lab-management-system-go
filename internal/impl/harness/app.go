@@ -13,13 +13,15 @@ import (
 
 	genapi "lab-management-system-go/internal/gen/api"
 	apiserver "lab-management-system-go/internal/impl/api"
+	"lab-management-system-go/internal/impl/service"
 )
 
-// Assemble 返回装配好的根 ServeMux。db 仅透传给 api Server（壳阶段可为 nil）。
-func Assemble(db *gorm.DB) *http.ServeMux {
+// Assemble 返回装配好的根 ServeMux。db 仅透传给 api Server；authSvc 为认证域
+// 服务（Task 5 起 auth 端点依赖；nil 时 auth 端点 500——壳阶段测试传 nil）。
+func Assemble(db *gorm.DB, authSvc *service.AuthService) *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /health", handleHealth)
-	_ = genapi.HandlerFromMux(apiserver.NewServer(db), mux)
+	_ = genapi.HandlerFromMux(apiserver.NewServerWithAuth(db, authSvc), mux)
 	return mux
 }
 
