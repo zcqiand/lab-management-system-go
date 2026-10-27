@@ -1,15 +1,12 @@
 {
-  "current_task": "REQ-2026-004 全交付：v0.2.0 代码+GA 翻牌（7 条 I 级已上线，aaa5fcf）+ CI 修复批全绿；待 secrets→tag 上线",
+  "current_task": "REQ-2026-004 全闭环：v0.2.0-20261027 已上线（tag deploy 全绿，/api/* 401 守卫实证）；secrets 十键已配",
   "done": [
-    "Task 10-12 全落地：samples/test-records 12 端点 + receipts/flow/summary 17 端点（d24c53d/27da412/6e93292，TDD 红绿齐全）",
-    "gate -p lab-management-system-go exit 0（含 strict 幂等 PASS、go clean -testcache 后 trace 重刷 7134 测试/113 fn）",
-    "lab rails gate L4 交叉绿；live 探针 saas:5101+lab-go:5211 native-login→me→menus→samples→stats 全 200",
-    "lab CT live 2-way（springboot,go）394/394 exit 0（CT 3c9ab8d M96 追平 go:5211）",
-    "family-env SAAS_IDP_BASE go member 补落盘（shared 6e4fb58）+ 5 消费仓 marker 刷 + gate.py 端口表双 CT 追平（5211/5111）+ saas-springboot spotless 补格（9928a48）——全推远端",
-    "gate --all 终跑：仅 swift×2 L2 home-mac 红（构建机离线 ping 100% 丢，环境性），284 PASS 其余全绿",
-    "final review（code-reviewer 子代理全新上下文）：BLOCK→修复——CORS 白名单中间件补交付/守卫验 typ/水合 saas 错误 401·502 分流（aabba55，各 RED→GREEN，suite 10/10，gate exit 0，已推）；4 Minor 记账不修"
+    "GA 翻牌 7 条 I 级已上线（aaa5fcf，人工验收 2026-10-27）",
+    "CI 修复批全绿（PG service+schema bootstrap+go.sum+冒烟 env+TTL 测试 bug，b0e265d）",
+    "GitHub secrets 七键已配（值真源=VPS rails env-file）；存量 go.env 删除后脚本自举 15 键",
+    "tag v0.2.0-20261027 deploy 全绿；prod /health 200 + /api/receipts 401 + /api/inspection/links 401 实证"
   ],
-  "next": "唯一余项=人配 GitHub secrets 七键（PG_HOST/PG_PASSWORD/JWT_SIGNING_KEY/LAB_SAAS_CLIENT_SECRET/LAB_SAAS_DEFAULT_TENANT_ID/LAB_SAAS_SERVICE_USER/LAB_SAAS_SERVICE_PASSWORD，值对齐 lab-management-system-rails 同名 secrets，PLAN.md 已注）→ 打 tag v0.2.0-20261027 触发 deploy（CI 全绿 aaa5fcf 起）；GA 翻牌已完成（7 条已上线，aaa5fcf）",
+  "next": "go 双仓主线全闭环。可选后续：家族 mirror 漂移 sync 批 / PKCE 家族裁定 / lab CT live 定期复跑；无阻塞项",
   "open_questions": [
     "7 条 I 级 GA 翻转需人明示验收（代码+测试+CT live 394/394 全实证，但脚本硬校验 REQ 文档「人工验收…通过」，rails 先例=用户明示，不能代写）",
     "GitHub secrets 七键谁配（3 键值在 VPS env-file 本地不可读，不代配）",
