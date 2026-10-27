@@ -6,13 +6,13 @@
     "lab rails gate L4 交叉绿；live 探针 saas:5101+lab-go:5211 native-login→me→menus→samples→stats 全 200",
     "lab CT live 2-way（springboot,go）394/394 exit 0（CT 3c9ab8d M96 追平 go:5211）",
     "family-env SAAS_IDP_BASE go member 补落盘（shared 6e4fb58）+ 5 消费仓 marker 刷 + gate.py 端口表双 CT 追平（5211/5111）+ saas-springboot spotless 补格（9928a48）——全推远端",
-    "gate --all 终跑：仅 swift×2 L2 home-mac 红（构建机离线 ping 100% 丢，环境性），284 PASS 其余全绿"
+    "gate --all 终跑：仅 swift×2 L2 home-mac 红（构建机离线 ping 100% 丢，环境性），284 PASS 其余全绿",
+    "final review（code-reviewer 子代理全新上下文）：BLOCK→修复——CORS 白名单中间件补交付/守卫验 typ/水合 saas 错误 401·502 分流（aabba55，各 RED→GREEN，suite 10/10，gate exit 0，已推）；4 Minor 记账不修"
   ],
   "next": " suites 已推，下一步是 lab-go 打 tag v0.2.0-20261027 触发 prod deploy——但先要人配 GitHub secrets 七键（PG_HOST/PG_PASSWORD/JWT_SIGNING_KEY/LAB_SAAS_CLIENT_SECRET/LAB_SAAS_DEFAULT_TENANT_ID/LAB_SAAS_SERVICE_USER/LAB_SAAS_SERVICE_PASSWORD，值对齐 lab-management-system-rails 同名 secrets，PLAN.md 已注）；tag 前可跑单仓 full 档 contract-test（gate.py -p lab-management-system-contract-test，需 6 目标全活）",
   "open_questions": [
     "GitHub secrets 七键谁配（3 键值在 VPS env-file 本地不可读，不代配）",
-    "swift L2 home-mac 构建机离线（Mac 睡眠/关机）——gate --all 不绿唯二来源，Mac 醒来后 ssh home-mac 探活再跑 --all 即清",
-    "final review 未做独立 code-reviewer（inline self-review 详见 ledger Ruling 行）；要独立评审可补派"
+    "swift L2 home-mac 构建机离线（Mac 睡眠/关机）——gate --all 不绿唯二来源，Mac 醒来后 ssh home-mac 探活再跑 --all 即清"
   ],
   "dont": [
     "task-start/task-done 外壳本机间歇挂起（WindowsApps python 别名+cygwin fork）——手工等价收账已裁定，别再试外壳",
