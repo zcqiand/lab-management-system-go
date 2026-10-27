@@ -68,3 +68,14 @@ func WriteJSON(w http.ResponseWriter, status int, v any) {
 		panic(err)
 	}
 }
+
+// WriteRawJSON 原样编码（键保持原状，不 camel 变换）——镜像 rails render json:。
+func WriteRawJSON(w http.ResponseWriter, status int, v any) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	enc := json.NewEncoder(w)
+	if err := enc.Encode(v); err != nil {
+		// 头已写，只能中断半截响应——编码失败是编程错误，fail-loud 于日志侧
+		panic(err)
+	}
+}
