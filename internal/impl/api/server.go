@@ -103,58 +103,10 @@ func (s *Server) ReceiptsAssignTask(w http.ResponseWriter, r *http.Request, id s
 	notImplemented(w)
 }
 
-func (s *Server) SamplesListSamples(w http.ResponseWriter, r *http.Request, params genapi.SamplesListSamplesParams) {
-	notImplemented(w)
-}
-
-func (s *Server) SamplesCreateSample(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) SamplesDeleteSample(w http.ResponseWriter, r *http.Request, id string) {
-	notImplemented(w)
-}
-
-func (s *Server) SamplesGetSample(w http.ResponseWriter, r *http.Request, id string) {
-	notImplemented(w)
-}
-
-func (s *Server) SamplesUpdateSample(w http.ResponseWriter, r *http.Request, id string) {
-	notImplemented(w)
-}
-
-func (s *Server) SamplesUpdateSampleExt(w http.ResponseWriter, r *http.Request, id string) {
-	notImplemented(w)
-}
-
 func (s *Server) SummaryGetReportSummary(w http.ResponseWriter, r *http.Request, params genapi.SummaryGetReportSummaryParams) {
 	notImplemented(w)
 }
 
 func (s *Server) SummaryGetDashboardStats(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) TestRecordsListTestRecords(w http.ResponseWriter, r *http.Request, params genapi.TestRecordsListTestRecordsParams) {
-	notImplemented(w)
-}
-
-func (s *Server) TestRecordsCreateTestRecord(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) TestRecordsDeleteTestRecord(w http.ResponseWriter, r *http.Request, id string) {
-	notImplemented(w)
-}
-
-func (s *Server) TestRecordsGetTestRecord(w http.ResponseWriter, r *http.Request, id string) {
-	notImplemented(w)
-}
-
-func (s *Server) TestRecordsUpdateTestRecord(w http.ResponseWriter, r *http.Request, id string) {
-	notImplemented(w)
-}
-
-func (s *Server) TestRecordsSetVerdict(w http.ResponseWriter, r *http.Request, id string) {
 	notImplemented(w)
 }
