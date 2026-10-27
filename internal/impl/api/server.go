@@ -47,26 +47,6 @@ func (s *Server) FrontendBindMetaGetFrontendBindSnapshot(w http.ResponseWriter, 
 	notImplemented(w)
 }
 
-func (s *Server) CalculationMethodsListCalculationMethods(w http.ResponseWriter, r *http.Request, params genapi.CalculationMethodsListCalculationMethodsParams) {
-	notImplemented(w)
-}
-
-func (s *Server) CalculationMethodsCreateCalculationMethod(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) CalculationMethodsDeleteCalculationMethod(w http.ResponseWriter, r *http.Request, inspectionObjectCode string, inspectionParameterCode string) {
-	notImplemented(w)
-}
-
-func (s *Server) CalculationMethodsGetCalculationMethod(w http.ResponseWriter, r *http.Request, inspectionObjectCode string, inspectionParameterCode string) {
-	notImplemented(w)
-}
-
-func (s *Server) CalculationMethodsUpdateCalculationMethod(w http.ResponseWriter, r *http.Request, inspectionObjectCode string, inspectionParameterCode string) {
-	notImplemented(w)
-}
-
 func (s *Server) ContractsListContracts(w http.ResponseWriter, r *http.Request, params genapi.ContractsListContractsParams) {
 	notImplemented(w)
 }
@@ -84,38 +64,6 @@ func (s *Server) ContractsGetContract(w http.ResponseWriter, r *http.Request, id
 }
 
 func (s *Server) ContractsUpdateContract(w http.ResponseWriter, r *http.Request, id string) {
-	notImplemented(w)
-}
-
-func (s *Server) ParamInterfacesListParamInterfaces(w http.ResponseWriter, r *http.Request, params genapi.ParamInterfacesListParamInterfacesParams) {
-	notImplemented(w)
-}
-
-func (s *Server) ParamInterfacesCreateParamInterface(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) ParamInterfacesUnlinkParamInterface(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) ParamInterfacesListParamInterfaceLinks(w http.ResponseWriter, r *http.Request, params genapi.ParamInterfacesListParamInterfaceLinksParams) {
-	notImplemented(w)
-}
-
-func (s *Server) ParamInterfacesLinkParamInterface(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) ParamInterfacesDeleteParamInterface(w http.ResponseWriter, r *http.Request, code string) {
-	notImplemented(w)
-}
-
-func (s *Server) ParamInterfacesGetParamInterface(w http.ResponseWriter, r *http.Request, code string) {
-	notImplemented(w)
-}
-
-func (s *Server) ParamInterfacesUpdateParamInterface(w http.ResponseWriter, r *http.Request, code string) {
 	notImplemented(w)
 }
 
@@ -260,26 +208,6 @@ func (s *Server) SummaryGetReportSummary(w http.ResponseWriter, r *http.Request,
 }
 
 func (s *Server) SummaryGetDashboardStats(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) TechnicalRequirementsListTechnicalRequirements(w http.ResponseWriter, r *http.Request, params genapi.TechnicalRequirementsListTechnicalRequirementsParams) {
-	notImplemented(w)
-}
-
-func (s *Server) TechnicalRequirementsCreateTechnicalRequirement(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) TechnicalRequirementsDeleteTechnicalRequirement(w http.ResponseWriter, r *http.Request, inspectionObjectCode string, inspectionParameterCode string, judgmentStandardCode string) {
-	notImplemented(w)
-}
-
-func (s *Server) TechnicalRequirementsGetTechnicalRequirement(w http.ResponseWriter, r *http.Request, inspectionObjectCode string, inspectionParameterCode string, judgmentStandardCode string) {
-	notImplemented(w)
-}
-
-func (s *Server) TechnicalRequirementsUpdateTechnicalRequirement(w http.ResponseWriter, r *http.Request, inspectionObjectCode string, inspectionParameterCode string, judgmentStandardCode string) {
 	notImplemented(w)
 }
 

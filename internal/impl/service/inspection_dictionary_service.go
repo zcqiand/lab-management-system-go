@@ -696,12 +696,12 @@ func (s *InspectionDictionaryService) ListStandardParameterLinks(standardCode, p
 
 // ---- junction 共享 ----
 
-// upsertJunction 同 PK 已存在则整行覆盖（含 created_at —— springboot merge 语义镜像），
-// 否则新建。
-func (s *InspectionDictionaryService) upsertJunction(table string, keys, payload map[string]any) error {
+// upsertJunctionTable 同 PK 已存在则整行覆盖（含 created_at —— springboot merge
+// 语义镜像），否则新建（包级供参数面 junction 复用）。
+func upsertJunctionTable(db *gorm.DB, table string, keys, payload map[string]any) error {
 	now := NowISO()
 	var rows []map[string]any
-	q := s.DB.Table(table)
+	q := db.Table(table)
 	for col, val := range keys {
 		q = q.Where(col+" = ?", val)
 	}
@@ -713,7 +713,7 @@ func (s *InspectionDictionaryService) upsertJunction(table string, keys, payload
 		for col, val := range payload {
 			updates[col] = val
 		}
-		q2 := s.DB.Table(table)
+		q2 := db.Table(table)
 		for col, val := range keys {
 			q2 = q2.Where(col+" = ?", val)
 		}
@@ -728,7 +728,13 @@ func (s *InspectionDictionaryService) upsertJunction(table string, keys, payload
 	}
 	row["created_at"] = now
 	row["updated_at"] = now
-	return s.DB.Table(table).Create(row).Error
+	return db.Table(table).Create(row).Error
+}
+
+// upsertJunction 同 PK 已存在则整行覆盖（含 created_at —— springboot merge 语义镜像），
+// 否则新建。
+func (s *InspectionDictionaryService) upsertJunction(table string, keys, payload map[string]any) error {
+	return upsertJunctionTable(s.DB, table, keys, payload)
 }
 
 // ---- 小件 ----
