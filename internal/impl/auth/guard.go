@@ -34,6 +34,12 @@ func Authenticate(w http.ResponseWriter, r *http.Request) (map[string]any, bool)
 		unauthorized(w)
 		return nil, false
 	}
+	// typ 必须是 access（rails token_service verify! 默认 TYP_ACCESS 镜像）——
+	// 不验则 7 天 refresh token（内嵌 saas 凭据）可打通全部受保护 op。
+	if claims["typ"] != TypAccess {
+		unauthorized(w)
+		return nil, false
+	}
 	if _, ok := claims["tenant_id"].(string); !ok || claims["tenant_id"] == "" {
 		claims["tenant_id"] = DirectoryDefaultTenant
 	}

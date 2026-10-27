@@ -12,8 +12,10 @@ import (
 // /health 由 harness.Assemble 注册（基础设施端点不挂功能 ID——ktor 先例，
 // trace fns 留空）。
 func TestHealthShape(t *testing.T) {
+	t.Setenv("LAB_CORS_ALLOWED_ORIGINS", "http://localhost:5201")
 	rec := httptest.NewRecorder()
-	New("127.0.0.1:0", harness.Assemble(nil, nil)).Handler.ServeHTTP(rec, httptest.NewRequest("GET", "/health", nil))
+	h := harness.Assemble(nil, nil)
+	h.ServeHTTP(rec, httptest.NewRequest("GET", "/health", nil))
 	if rec.Code != 200 {
 		t.Fatalf("期望 200，得到 %d", rec.Code)
 	}

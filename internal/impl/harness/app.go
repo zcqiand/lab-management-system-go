@@ -18,7 +18,12 @@ import (
 
 // Assemble 返回装配好的根 ServeMux。db 仅透传给 api Server；authSvc 为认证域
 // 服务（Task 5 起 auth 端点依赖；nil 时 auth 端点 500——壳阶段测试传 nil）。
-func Assemble(db *gorm.DB, authSvc *service.AuthService) *http.ServeMux {
+func Assemble(db *gorm.DB, authSvc *service.AuthService) http.Handler {
+	return withCORS(corsAllowedOrigins(), assembleMux(db, authSvc))
+}
+
+// assembleMux 裸 mux 装配（无 CORS 壳；route-parity 测试用 .Handler(pattern) 查表）。
+func assembleMux(db *gorm.DB, authSvc *service.AuthService) *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /health", handleHealth)
 	_ = genapi.HandlerFromMux(apiserver.NewServerWithAuth(db, authSvc), mux)

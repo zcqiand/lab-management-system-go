@@ -636,3 +636,52 @@ func TestSsoCallbackMissingCode(t *testing.T) {
 		t.Fatalf("缺 code 应 400: %+v", e)
 	}
 }
+
+// TestRefreshHydrateSaasDown502 token 换取成功但 whoami 阶段 saas 不可达 → 502
+// （final review Important#3：hydrateAndSession 原样上抛 sentinel，handler 落 500
+// INTERNAL，违反 Refresh docstring 承诺的 401/502 分流）。
+// fn: M01.F05.I04
+func TestRefreshHydrateSaasDown502(t *testing.T) {
+	setJWTEnv(t)
+	fake := okLoginFake(t)
+	fake.whoami = func(context.Context, string) (map[string]any, error) {
+		return nil, saas.ErrUpstreamUnavailable{}
+	}
+	svc := newTestService(fake)
+	token, _ := svc.tokens.IssueRefresh("saas-1", "saas-rt")
+	_, err := svc.Refresh(context.Background(), token)
+	if e := asE(t, err); e.Status != 502 || e.Code != "SAAS_UPSTREAM_ERROR" {
+		t.Fatalf("水合阶段 saas 不可达应 502: %+v", e)
+	}
+}
+
+// TestRefreshHydrateWhoamiUnauthorized401 水合阶段 saas 401（token 即刻失效）→ 401。
+// fn: M01.F05.I04
+func TestRefreshHydrateWhoamiUnauthorized401(t *testing.T) {
+	setJWTEnv(t)
+	fake := okLoginFake(t)
+	fake.whoami = func(context.Context, string) (map[string]any, error) {
+		return nil, saas.ErrUnauthorizedClient{}
+	}
+	svc := newTestService(fake)
+	token, _ := svc.tokens.IssueRefresh("saas-1", "saas-rt")
+	_, err := svc.Refresh(context.Background(), token)
+	if e := asE(t, err); e.Status != 401 {
+		t.Fatalf("水合阶段 saas 401 应映射 401: %+v", e)
+	}
+}
+
+// TestSsoCallbackHydrateSaasDown502 SSO 回调 code 换取成功但水合阶段 saas 不可达 → 502。
+// fn: M01.F05.I03
+func TestSsoCallbackHydrateSaasDown502(t *testing.T) {
+	setJWTEnv(t)
+	fake := okLoginFake(t)
+	fake.whoami = func(context.Context, string) (map[string]any, error) {
+		return nil, saas.ErrUpstreamUnavailable{}
+	}
+	svc := newTestService(fake)
+	_, err := svc.SsoCallback(context.Background(), "code-1", "http://localhost:5202/login")
+	if e := asE(t, err); e.Status != 502 || e.Code != "SAAS_UPSTREAM_ERROR" {
+		t.Fatalf("回调水合阶段 saas 不可达应 502: %+v", e)
+	}
+}

@@ -132,8 +132,26 @@ func (s *AuthService) Refresh(ctx context.Context, refreshToken string) (map[str
 			return nil, err
 		}
 	}
-	// refresh 路径 claim 原样透传（claim 已是签发时点的 key）
-	return s.hydrateAndSession(ctx, strVal(claims["tenant_id"]), t, false)
+	// refresh 路径 claim 原样透传（claim 已是签发时点的 key）；水合阶段 saas 错误
+	// 与 Token 阶段同款分流（final review Important#3：sentinel 原样上抛会落 500）
+	out, err := s.hydrateAndSession(ctx, strVal(claims["tenant_id"]), t, false)
+	if err != nil {
+		return nil, s.mapSaasErr(err, familyerrors.ErrInvalidCredentials())
+	}
+	return out, nil
+}
+
+// mapSaasErr saas sentinel → 家族错误形状（InvalidGrant/UnauthorizedClient→401、
+// UpstreamUnavailable→502、其余原样——与 Token 调用点 switch 同形）。
+func (s *AuthService) mapSaasErr(err error, credErr error) error {
+	switch {
+	case errors.Is(err, saas.ErrUnauthorizedClient{}), errors.Is(err, saas.ErrInvalidGrant{}):
+		return credErr
+	case errors.Is(err, saas.ErrUpstreamUnavailable{}):
+		return familyerrors.ErrSaasUpstream()
+	default:
+		return err
+	}
 }
 
 // Logout 登出（无状态 JWT，服务端无 session store）。
@@ -236,8 +254,16 @@ func (s *AuthService) SsoCallback(ctx context.Context, code, redirectURI string)
 			return nil, err
 		}
 	}
-	// callback 路径 current 经 tenant_key 解析（2026-10-20 人裁）
-	return s.hydrateAndSession(ctx, "", t, true)
+	// callback 路径 current 经 tenant_key 解析（2026-10-20 人裁）；水合阶段 saas
+	// 错误按本链三分流（InvalidGrant→400 passthrough、UnauthorizedClient→401、不可达→502）
+	out, err := s.hydrateAndSession(ctx, "", t, true)
+	if err != nil {
+		if errors.Is(err, saas.ErrInvalidGrant{}) {
+			return nil, familyerrors.ErrInvalidGrant("saas invalid grant")
+		}
+		return nil, s.mapSaasErr(err, familyerrors.ErrInvalidCredentials())
+	}
+	return out, nil
 }
 
 // ---- 内部：水合 / 映射 / 会话（rails private 段镜像） ----
