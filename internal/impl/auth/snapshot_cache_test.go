@@ -9,7 +9,8 @@ import (
 )
 
 func TestSnapshotCachePutGet(t *testing.T) {
-	c := NewSnapshotCache(60)
+	// 60*time.Second：裸 60 = 60ns，Windows 粗时钟侥幸绿、Linux runner 必过期（CI 实证）
+	c := NewSnapshotCache(60 * time.Second)
 	c.Put("u1", []string{"a"})
 	v, ok := c.Get("u1")
 	if !ok || v.([]string)[0] != "a" {
@@ -18,14 +19,14 @@ func TestSnapshotCachePutGet(t *testing.T) {
 }
 
 func TestSnapshotCacheMiss(t *testing.T) {
-	c := NewSnapshotCache(60)
+	c := NewSnapshotCache(60 * time.Second)
 	if _, ok := c.Get("nobody"); ok {
 		t.Fatal("miss 应 ok=false")
 	}
 }
 
 func TestSnapshotCacheEmptyValueIsHit(t *testing.T) {
-	c := NewSnapshotCache(60)
+	c := NewSnapshotCache(60 * time.Second)
 	c.Put("u1", []string{})
 	v, ok := c.Get("u1")
 	if !ok || v == nil {
