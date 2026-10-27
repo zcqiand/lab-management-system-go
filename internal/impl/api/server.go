@@ -47,26 +47,6 @@ func (s *Server) FrontendBindMetaGetFrontendBindSnapshot(w http.ResponseWriter, 
 	notImplemented(w)
 }
 
-func (s *Server) ContractsListContracts(w http.ResponseWriter, r *http.Request, params genapi.ContractsListContractsParams) {
-	notImplemented(w)
-}
-
-func (s *Server) ContractsCreateContract(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) ContractsDeleteContract(w http.ResponseWriter, r *http.Request, id string) {
-	notImplemented(w)
-}
-
-func (s *Server) ContractsGetContract(w http.ResponseWriter, r *http.Request, id string) {
-	notImplemented(w)
-}
-
-func (s *Server) ContractsUpdateContract(w http.ResponseWriter, r *http.Request, id string) {
-	notImplemented(w)
-}
-
 func (s *Server) ReceiptsListReceipts(w http.ResponseWriter, r *http.Request, params genapi.ReceiptsListReceiptsParams) {
 	notImplemented(w)
 }
@@ -120,62 +100,6 @@ func (s *Server) ReceiptsGetReceiptHistory(w http.ResponseWriter, r *http.Reques
 }
 
 func (s *Server) ReceiptsAssignTask(w http.ResponseWriter, r *http.Request, id string) {
-	notImplemented(w)
-}
-
-func (s *Server) ReportNamesListReportNames(w http.ResponseWriter, r *http.Request, params genapi.ReportNamesListReportNamesParams) {
-	notImplemented(w)
-}
-
-func (s *Server) ReportNamesCreateReportName(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) ReportNamesUnlinkObjectReportName(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) ReportNamesListObjectReportNameLinks(w http.ResponseWriter, r *http.Request, params genapi.ReportNamesListObjectReportNameLinksParams) {
-	notImplemented(w)
-}
-
-func (s *Server) ReportNamesLinkObjectReportName(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) ReportNamesUnlinkReportNameParameter(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) ReportNamesListReportNameParameterLinks(w http.ResponseWriter, r *http.Request, params genapi.ReportNamesListReportNameParameterLinksParams) {
-	notImplemented(w)
-}
-
-func (s *Server) ReportNamesLinkReportNameParameter(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) ReportNamesUnlinkReportNameStandard(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) ReportNamesListReportNameStandardLinks(w http.ResponseWriter, r *http.Request, params genapi.ReportNamesListReportNameStandardLinksParams) {
-	notImplemented(w)
-}
-
-func (s *Server) ReportNamesLinkReportNameStandard(w http.ResponseWriter, r *http.Request) {
-	notImplemented(w)
-}
-
-func (s *Server) ReportNamesDeleteReportName(w http.ResponseWriter, r *http.Request, code string) {
-	notImplemented(w)
-}
-
-func (s *Server) ReportNamesGetReportName(w http.ResponseWriter, r *http.Request, code string) {
-	notImplemented(w)
-}
-
-func (s *Server) ReportNamesUpdateReportName(w http.ResponseWriter, r *http.Request, code string) {
 	notImplemented(w)
 }
 
