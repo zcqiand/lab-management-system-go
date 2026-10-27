@@ -6,7 +6,7 @@ package harness
 // 断言一：manifest 120 op 每条都能被装配出的 ServeMux 以「方法+路径」精确命中
 // （pattern 逐字节相等，{clientId} 段用探针值替换）。
 // 断言二：路径对、方法错 → 405（拦「catch-all 注册」类漂移）；
-//         契约外的根路径 → 404（infra 端点只有 /health，ktor/laravel 先例）。
+//         契约外的根路径 → 404（infra 端点=/health + /api-docs，ktor/laravel 先例）。
 //
 // 本测试不连库（装配只注册路由，handler 壳不触 DB）——rails RouteParityTest
 // 无库先例同构。
