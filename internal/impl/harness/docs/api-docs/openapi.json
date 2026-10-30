@@ -4052,6 +4052,7 @@
     },
     "/api/catalog/brands": {
       "get": {
+        "description": "分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。",
         "operationId": "Catalog_listBrands",
         "parameters": [
           {
@@ -4106,11 +4107,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -4271,6 +4274,7 @@
     },
     "/api/catalog/grades": {
       "get": {
+        "description": "分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。",
         "operationId": "Catalog_listGrades",
         "parameters": [
           {
@@ -4325,11 +4329,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -4490,6 +4496,7 @@
     },
     "/api/catalog/models": {
       "get": {
+        "description": "分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。",
         "operationId": "Catalog_listModels",
         "parameters": [
           {
@@ -4544,11 +4551,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -4709,6 +4718,7 @@
     },
     "/api/catalog/specs": {
       "get": {
+        "description": "分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。",
         "operationId": "Catalog_listSpecs",
         "parameters": [
           {
@@ -4763,11 +4773,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -4928,6 +4940,7 @@
     },
     "/api/contracts": {
       "get": {
+        "description": "分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。",
         "operationId": "Contracts_listContracts",
         "parameters": [
           {
@@ -4982,11 +4995,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -5263,11 +5278,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -5422,11 +5439,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -5556,11 +5575,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -5699,11 +5720,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -5776,6 +5799,7 @@
     },
     "/api/inspection/objects": {
       "get": {
+        "description": "分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。",
         "operationId": "InspectionDictionary_listObjects",
         "parameters": [
           {
@@ -5830,11 +5854,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -5995,6 +6021,7 @@
     },
     "/api/inspection/parameters": {
       "get": {
+        "description": "分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。",
         "operationId": "InspectionDictionary_listParameters",
         "parameters": [
           {
@@ -6049,11 +6076,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -6214,6 +6243,7 @@
     },
     "/api/inspection/specialties": {
       "get": {
+        "description": "分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。",
         "operationId": "InspectionDictionary_listSpecialties",
         "parameters": [
           {
@@ -6259,11 +6289,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -6424,6 +6456,7 @@
     },
     "/api/inspection/standards": {
       "get": {
+        "description": "分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。",
         "operationId": "InspectionDictionary_listStandards",
         "parameters": [
           {
@@ -6478,11 +6511,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -6643,6 +6678,7 @@
     },
     "/api/param-interfaces": {
       "get": {
+        "description": "分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。",
         "operationId": "ParamInterfaces_listParamInterfaces",
         "parameters": [
           {
@@ -6688,11 +6724,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -6850,11 +6888,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -7046,6 +7086,7 @@
     },
     "/api/receipts": {
       "get": {
+        "description": "分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。",
         "operationId": "Receipts_listReceipts",
         "parameters": [
           {
@@ -7118,11 +7159,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -7723,6 +7766,7 @@
     },
     "/api/report-names": {
       "get": {
+        "description": "分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。",
         "operationId": "ReportNames_listReportNames",
         "parameters": [
           {
@@ -7768,11 +7812,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -7930,11 +7976,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -8085,11 +8133,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -8244,11 +8294,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -8440,6 +8492,7 @@
     },
     "/api/samples": {
       "get": {
+        "description": "分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。",
         "operationId": "Samples_listSamples",
         "parameters": [
           {
@@ -8494,11 +8547,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
@@ -9114,6 +9169,7 @@
     },
     "/api/test-records": {
       "get": {
+        "description": "分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。",
         "operationId": "TestRecords_listTestRecords",
         "parameters": [
           {
@@ -9168,11 +9224,13 @@
                       "type": "array"
                     },
                     "page": {
+                      "description": "当前实现仅回显，不切片：参照实现返回全量，无分页语义。",
                       "example": 1,
                       "format": "int32",
                       "type": "integer"
                     },
                     "pageSize": {
+                      "description": "当前实现仅回显，不切片。",
                       "example": 20,
                       "format": "int32",
                       "type": "integer"
