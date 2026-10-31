@@ -118,8 +118,6 @@ def main() -> int:
         top = name.split("/")[0]  # 子测试 TestX/sub 沿用父测试的挂 ID
         ids = sorted(fn_map.get(name) or fn_map.get(top) or set())
         entries.append({"test": name, "fns": [] if inert else ids, "inert": inert})
-    # 修 entries 双重循环：原嵌套块每轮外层把全量 entries 再 append 一遍，
-    # trace.json 出 N² 行重复（saas-go 2026-10-27 auth 批同款修复，反灌 mold 5.126）。
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(
