@@ -96,8 +96,9 @@ func (s *AuthService) Login(ctx context.Context, username, password string) (map
 	// 密码登录用户无 per-user saas refresh → 服务账号拉菜单快照（失败不阻塞登录）
 	s.cacheMenusWithServiceAccount(ctx, user.ID)
 	s.membership.Put(user.ID, tenants)
-	// 目录落地（email 缺失降级 username，ADR-0008）——me/switch 的 resolve_user 依赖
-	s.dir.Upsert(user.ID, firstPresence(strVal(saasUser["email"]), user.Username), user.DisplayName, user.RoleCode)
+	// 目录落地（email 缺失降级 username，ADR-0008）——me/switch 的 resolve_user 依赖；
+	// username 单独传 saas 登录名（email 只作幂等键，不得兼作 Username）
+	s.dir.Upsert(user.ID, firstPresence(strVal(saasUser["email"]), user.Username), user.Username, user.DisplayName, user.RoleCode)
 	// lab 自家 JWT 重签（tenant_id=saas currentTenantId ?? 首租户 → tenant_key）；
 	// refresh 维持 dev-placeholder（不透传 saas refreshToken）
 	current := saasLogin.CurrentTenantID
@@ -279,7 +280,7 @@ func (s *AuthService) hydrateAndSession(ctx context.Context, tenantID string, t 
 	email := strVal(saasUser["email"])
 	labUser := s.dir.FindByEmail(email)
 	if labUser == nil {
-		labUser = s.dir.Upsert(strVal(saasUser["id"]), email, strVal(saasUser["displayName"]), "viewer")
+		labUser = s.dir.Upsert(strVal(saasUser["id"]), email, strVal(saasUser["username"]), strVal(saasUser["displayName"]), "viewer")
 	}
 	s.cacheMenus(ctx, labUser.ID, t.AccessToken)
 	s.dir.SetSaasRefreshToken(labUser.ID, t.RefreshToken)

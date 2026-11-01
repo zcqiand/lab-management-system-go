@@ -38,16 +38,16 @@ func TestDirectoryTenants(t *testing.T) {
 
 func TestDirectoryUpsertIdempotentByEmail(t *testing.T) {
 	d := NewDirectory()
-	u1 := d.Upsert("saas-uuid-1", "bob@x.uk", "Bob", "viewer")
-	u2 := d.Upsert("saas-uuid-1", "bob@x.uk", "Bob", "viewer")
+	u1 := d.Upsert("saas-uuid-1", "bob@x.uk", "bob", "Bob", "viewer")
+	u2 := d.Upsert("saas-uuid-1", "bob@x.uk", "bob", "Bob", "viewer")
 	if u1 != u2 {
 		t.Fatal("同 email upsert 应复用同一用户")
 	}
-	if got := d.FindByID("saas-uuid-1"); got == nil || got.Username != "bob@x.uk" {
+	if got := d.FindByID("saas-uuid-1"); got == nil || got.Username != "bob" {
 		t.Fatalf("upsert 后按 id 查找不符: %+v", got)
 	}
 	// 空 roleCode 降级 viewer
-	u3 := d.Upsert("saas-uuid-2", "carol@x.uk", "Carol", "")
+	u3 := d.Upsert("saas-uuid-2", "carol@x.uk", "carol", "Carol", "")
 	if u3.RoleCode != "viewer" {
 		t.Fatalf("空 roleCode 应降级 viewer: %+v", u3)
 	}

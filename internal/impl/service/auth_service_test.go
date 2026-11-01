@@ -202,8 +202,8 @@ func TestLoginProxyHappyPath(t *testing.T) {
 		t.Fatal("membership 快照应已写")
 	}
 	// directory 已落（upsert 键=email 优先，ADR-0008；resolve_user 后续 me/switch 用）
-	if u := svc.dir.FindByID("saas-1"); u == nil || u.Username != "alice@x.uk" {
-		t.Fatalf("directory 应已 upsert（email 键）: %+v", u)
+	if u := svc.dir.FindByID("saas-1"); u == nil || u.Username != "alice" {
+		t.Fatalf("directory 应已 upsert（email 键，Username=saas 登录名）: %+v", u)
 	}
 }
 
@@ -372,6 +372,27 @@ func TestRefreshSaasDown(t *testing.T) {
 
 // ---- me（M00.F01.I01） ----
 
+// TestMeUsernameIsSaasUsername：/me user.username 必须是 saas 登录名（alice），
+// 不得回退成 email（2026-11-01 lab CT live 四方比对实证 go 独树：username=alice@x.uk）。
+// 修前 Login→目录 Upsert 把 email 兼作 Username 落地（loginUser 已算对但被目录覆盖）。
+// fn: M00.F01.I01
+func TestMeUsernameIsSaasUsername(t *testing.T) {
+	setJWTEnv(t)
+	fake := okLoginFake(t)
+	svc := newTestService(fake)
+	if _, err := svc.Login(context.Background(), "alice", "dev123456"); err != nil {
+		t.Fatalf("登录失败: %v", err)
+	}
+	out, err := svc.Me(map[string]any{"sub": "saas-1", "tenant_id": "city-lab"})
+	if err != nil {
+		t.Fatalf("me 不应错: %v", err)
+	}
+	user := out["user"].(map[string]any)
+	if user["username"] != "alice" {
+		t.Fatalf("username 应为 saas 登录名 alice，实得 %v", user["username"])
+	}
+}
+
 // TestMeCachedHit 快照 hit 优先：tenants 同源登录、current=claim。
 // fn: M00.F01.I01
 func TestMeCachedHit(t *testing.T) {
@@ -399,7 +420,7 @@ func TestMeCachedHit(t *testing.T) {
 func TestMeEmptySnapshotIsHit(t *testing.T) {
 	setJWTEnv(t)
 	svc := newTestService(okLoginFake(t))
-	svc.dir.Upsert("u1", "bob@x.uk", "Bob", "viewer")
+	svc.dir.Upsert("u1", "bob@x.uk", "bob", "Bob", "viewer")
 	svc.membership.Put("u1", []map[string]any{})
 	out, err := svc.Me(map[string]any{"sub": "u1", "tenant_id": "t9"})
 	if err != nil {
@@ -418,7 +439,7 @@ func TestMeEmptySnapshotIsHit(t *testing.T) {
 func TestMeCacheMissWithSaasRefresh(t *testing.T) {
 	setJWTEnv(t)
 	svc := newTestService(okLoginFake(t))
-	svc.dir.Upsert("u1", "bob@x.uk", "Bob", "viewer")
+	svc.dir.Upsert("u1", "bob@x.uk", "bob", "Bob", "viewer")
 	svc.dir.SetSaasRefreshToken("u1", "rt")
 	_, err := svc.Me(map[string]any{"sub": "u1"})
 	if e := asE(t, err); e.Status != 401 {
@@ -431,7 +452,7 @@ func TestMeCacheMissWithSaasRefresh(t *testing.T) {
 func TestMeDirectoryFallback(t *testing.T) {
 	setJWTEnv(t)
 	svc := newTestService(okLoginFake(t))
-	svc.dir.Upsert("u1", "bob@x.uk", "Bob", "viewer")
+	svc.dir.Upsert("u1", "bob@x.uk", "bob", "Bob", "viewer")
 	out, err := svc.Me(map[string]any{"sub": "u1"})
 	if err != nil {
 		t.Fatalf("目录降级不应错: %v", err)

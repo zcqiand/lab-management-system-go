@@ -67,7 +67,8 @@ func (d *Directory) FindByUsername(username string) *CurrentUser {
 	return nil
 }
 
-// FindByEmail 按 email 查（ADR-0008 username/email 桥接：demo 用户 username 即命中）。
+// FindByEmail 按 email 查（ADR-0008 username/email 桥接：demo 用户 username 即命中；
+// upserted 以 email 为键——username/email 解耦后按键匹配，不再借道 Username 字段）。
 func (d *Directory) FindByEmail(email string) *CurrentUser {
 	d.mu.Lock()
 	defer d.mu.Unlock()
@@ -75,8 +76,8 @@ func (d *Directory) FindByEmail(email string) *CurrentUser {
 		u := d.demoUser
 		return &u
 	}
-	for _, u := range d.upserted {
-		if u.Username == email {
+	for key, u := range d.upserted {
+		if key == email {
 			return u
 		}
 	}
@@ -121,7 +122,10 @@ func (d *Directory) FindByTenantID(tenantID string) *MyTenant {
 }
 
 // Upsert SSO 首次落地（email 键幂等；空 roleCode 降级 viewer）。
-func (d *Directory) Upsert(id, email, displayName, roleCode string) *CurrentUser {
+// username 与 email 键分离（2026-11-01 CT live 四方比对收口）：目录条目 Username
+// 必须=saas 登录名——修前 email 兼作 Username 落地，/me username 退化为 alice@…；
+// 空值降级 email（ADR-0008 语义保留）。
+func (d *Directory) Upsert(id, email, username, displayName, roleCode string) *CurrentUser {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	if u, ok := d.upserted[email]; ok {
@@ -130,9 +134,19 @@ func (d *Directory) Upsert(id, email, displayName, roleCode string) *CurrentUser
 	if roleCode == "" {
 		roleCode = "viewer"
 	}
-	u := &CurrentUser{ID: id, Username: email, DisplayName: displayName, RoleCode: roleCode}
+	u := &CurrentUser{ID: id, Username: firstNonEmpty(username, email), DisplayName: displayName, RoleCode: roleCode}
 	d.upserted[email] = u
 	return u
+}
+
+// firstNonEmpty 返回第一个非空串参数（全空返回空串）。
+func firstNonEmpty(vals ...string) string {
+	for _, v := range vals {
+		if v != "" {
+			return v
+		}
+	}
+	return ""
 }
 
 // SetSaasRefreshToken 落 per-user saas refresh token（空键/空值忽略）。
